@@ -3,10 +3,13 @@ import logging
 import random
 import os
 import pygita
-TOKEN = os.environ.get("TOKEN")
-PORT = os.environ.get("PORT",5000)
-CLIENT_ID = os.environ.get("CLIENT_ID")
-CLIENT_SECRET = os.environ.get("CLIENT_SECRET")
+from decouple import config
+
+
+TOKEN = config("TOKEN")
+PORT = config("PORT",8443)
+CLIENT_ID = config("CLIENT_ID")
+CLIENT_SECRET = config("CLIENT_SECRET")
 
 client = pygita.Client(CLIENT_ID, CLIENT_SECRET)
 
