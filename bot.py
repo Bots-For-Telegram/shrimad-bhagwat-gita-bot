@@ -8,6 +8,9 @@ PORT = os.environ.get("PORT",5000)
 CLIENT_ID = os.environ.get("CLIENT_ID")
 CLIENT_SECRET = os.environ.get("CLIENT_SECRET")
 
+client = pygita.Client(CLIENT_ID, CLIENT_SECRET)
+
+
 def start(update,context):
     message = "Hi!! {} , To get random verse of Srimadbhagavad Gita send /verse.To get a specific verse send /verse <chapter no> <verse no>.\n \nadd 'hi' or 'en' to get meaning also. \nExamples : /verse 1 4 (verse 1 from chapter 2)\n ,/verse 1 (random verse from chapter 1)\n ,/verse (random verse)\nBot developed by @TheShubhendra".format(update.message.from_user.first_name)  
     context.bot.send_message(update.message.chat_id,message)
@@ -28,21 +31,20 @@ def verse(update,context):
     pass
   if verse_number and chapter_number:
     if "hi" in text:
-      verse = pygita.get_verse(chapter_number,verse_number,language="hi")
+      verse = client.get_verse(chapter_number,verse_number,language="hi")
       update.message.reply_text(verse.text+"\n"+verse.meaning)
     elif "en" in text:
-      verse = pygita.get_verse(chapter_number,verse_number,language="en")
+      verse = client.get_verse(chapter_number,verse_number,language="en")
       update.message.reply_text(verse.text+"\n"+verse.meaning)
     else:
-      verse = pygita.get_verse(chapter_number,verse_number)
+      verse = client.get_verse(chapter_number,verse_number)
       update.message.reply_text(verse.text)
   else:
     update.message.reply_text("Please provide verse and chapter number properly.")
 def main():  
   
   logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
-  pygita.auth(CLIENT_ID,CLIENT_SECRET)
-  updater = Updater(TOKEN,use_context=True)
+  updater = Updater(token=TOKEN)
   dispatcher = updater.dispatcher
 
   handler = CommandHandler(["verse","verse_hi","verse_en"],verse)
