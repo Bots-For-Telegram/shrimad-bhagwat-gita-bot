@@ -16,6 +16,8 @@ def verse(update,context):
   text = update.message.text.lower()
   text=text.split()
   numbers = [i for i in text if i.isdigit()]
+  verse_numner=None
+  chapter_numner=None
   try:
     verse_number = numbers[1]
   except:
